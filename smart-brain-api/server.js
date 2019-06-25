@@ -1,15 +1,20 @@
+//dependency injection
 const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
+
+//controllers
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
 
+//starting express server
 const server = express();
 
+//connecting to the database
 const db = knex({
   client: "pg",
   connection: {
@@ -20,13 +25,18 @@ const db = knex({
   }
 });
 
+//parse body data to json
 server.use(bodyParser.json());
+
+//cross origin
 server.use(cors());
 
+//root directory
 server.get("/", (req, res) => {
   res.send(database.users);
 });
 
+//sign in directory
 server.post("/signin", (req, res) => {
   signin.handleSignin(req, res, db, bcrypt);
 });
@@ -47,8 +57,9 @@ server.post("/imageUrl", (req, res) => {
   image.handleApiCall(req, res);
 });
 
-server.listen(8080, () => {
-  console.log("running....");
+//listening on port 8080
+server.listen(process.env.PORT || 8080, () => {
+  console.log(`running on port ${process.env.PORT}`);
 });
 
 /*
