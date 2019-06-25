@@ -33,7 +33,7 @@ server.use(cors());
 
 //root directory
 server.get("/", (req, res) => {
-  res.send(database.users);
+  res.send("its working");
 });
 
 //sign in directory
